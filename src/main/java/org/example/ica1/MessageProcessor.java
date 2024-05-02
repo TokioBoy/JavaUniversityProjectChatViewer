@@ -60,7 +60,7 @@ public class MessageProcessor {
             chatViewerController.getChatTextFlow().getChildren().addAll(timeText, nameText);
             formatAndAddMessage(messageText.getText());
         } else {
-            errorHandler.showErrorMessage("Error: Invalid format in the conversation file at line " + lineNumber);
+            errorHandler.showErrorMessage("Error: Invalid format in the conversation file at line " + lineNumber + ", choose another file");
         }
     }
 
@@ -111,7 +111,7 @@ public class MessageProcessor {
     public void setFirstMessage(boolean firstMessage) {
         this.firstMessage = firstMessage;
     }
-
+    
     protected void processMessageAction(String[] messageLines, int lineNumber) {
         processMessage(messageLines, lineNumber);
     }

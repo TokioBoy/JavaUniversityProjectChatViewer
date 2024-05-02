@@ -42,11 +42,10 @@ public class ErrorHandler {
     }
 
     private void showErrorAndWarning(String field, int lineNumber) {
-
+        errorCounter++;
         if (errorCounter < 5) {
             showError("Error: Text in the '" + field + "' field is empty at line " + lineNumber);
             showError("Warning: Because '" + field + "' is empty, changed to 'Unknown " + field.toLowerCase() + "' at line " + lineNumber + ", we do not recommend using this file");
-            errorCounter++;
             if (errorCounter == 5) {
                 showError("Warning: Since the file contains very many errors, we do not recommend using it. In the next moment, the contents of the file you have opened will be displayed. Please note that some data may be missing or incorrect. Wherever it was not possible to determine the relevant information, the fields have been replaced by \"Unknown nickname\" and \"Unknown time\"");
             }

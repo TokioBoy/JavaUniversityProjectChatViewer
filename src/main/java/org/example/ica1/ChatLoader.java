@@ -45,7 +45,7 @@ public class ChatLoader {
                         messageNumber = 0;
                     }
                 } else if (messageNumber > 0) {
-                    errorHandler.showErrorMessage("Error: Missing lines in the conversation file at line " + lineNumber);
+                    errorHandler.showErrorMessage("Error: Missing lines in the conversation file at line " + lineNumber + ", choose another file");
                     return;
                 }
                 lineNumber++;
