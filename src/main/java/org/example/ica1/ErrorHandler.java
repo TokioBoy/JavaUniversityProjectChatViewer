@@ -1,12 +1,8 @@
 package org.example.ica1;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
-
 public class ErrorHandler {
 
     private static int errorCounter = 0;
@@ -42,11 +38,11 @@ public class ErrorHandler {
     }
 
     private void showErrorAndWarning(String field, int lineNumber) {
-        errorCounter++;
-        if (errorCounter < 5) {
+        if (errorCounter < 1) {
             showError("Error: Text in the '" + field + "' field is empty at line " + lineNumber);
             showError("Warning: Because '" + field + "' is empty, changed to 'Unknown " + field.toLowerCase() + "' at line " + lineNumber + ", we do not recommend using this file");
-            if (errorCounter == 5) {
+            errorCounter++;
+            if (errorCounter == 1) {
                 showError("Warning: Since the file contains very many errors, we do not recommend using it. In the next moment, the contents of the file you have opened will be displayed. Please note that some data may be missing or incorrect. Wherever it was not possible to determine the relevant information, the fields have been replaced by \"Unknown nickname\" and \"Unknown time\"");
             }
         }

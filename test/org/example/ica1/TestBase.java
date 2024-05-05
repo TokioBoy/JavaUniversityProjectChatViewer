@@ -1,7 +1,5 @@
 package org.example.ica1;
 
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -17,13 +15,6 @@ public class TestBase extends ApplicationTest {
 
     @BeforeClass
     public static void setUpHeadLessMode() throws TimeoutException {
-//        if (Boolean.getBoolean("headless")) {
-//            System.setProperty("testfx.robot", "glass");
-//            System.setProperty("testfx.headless", "true");
-//            System.setProperty("prism.order", "sw");
-//            System.setProperty("prism.text", "t2k");
-//            System.setProperty("java.awt.headless", "true");
-//        }
 
         FxToolkit.registerPrimaryStage();
         FxToolkit.hideStage(); // hide primary Stage, if was previously shown.

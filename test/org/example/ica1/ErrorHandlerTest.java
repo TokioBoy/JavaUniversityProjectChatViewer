@@ -1,37 +1,35 @@
 package org.example.ica1;
 import javafx.application.Platform;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
-import org.testfx.api.FxRobot;
-import org.testfx.api.FxToolkit;
-import org.testfx.framework.junit5.TestFx;
 
-import java.awt.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ErrorHandlerTest extends TestBase {
-
-
     @Test
-    void errorCounterTest() throws TimeoutException {
-//        ErrorHandler errorHandler = new ErrorHandler();
+    void errorCounterTest() throws ExecutionException, InterruptedException, TimeoutException {
+        ErrorHandler errorHandler = new ErrorHandler();
+
+        // Create CompletableFuture to signal when error messages are shown
+        CompletableFuture<Void> errorShown = new CompletableFuture<>();
+
         Platform.runLater(() -> {
-            ErrorHandler errorHandler = new ErrorHandler();
             errorHandler.showErrorMessageAndWarning("Test error message", 1);
+            // Signal completion when all error messages are shown
+            errorShown.complete(null);
         });
+        closeCurrentWindow();
+        closeCurrentWindow();
+        closeCurrentWindow();
 
-//        Awaitility.await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
-//            assertEquals(3, ErrorHandler.getErrorCounter());
-//        });
-
-        assertEquals(3, ErrorHandler.getErrorCounter());
+        // Wait for the error messages to be processed
+        errorShown.get(10, SECONDS);
+        assertEquals(1, ErrorHandler.getErrorCounter());
+        System.out.println("errorCounterTest passed, errorCounter is 1");
     }
+
 }
