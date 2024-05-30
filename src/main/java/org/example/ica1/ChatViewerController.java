@@ -6,9 +6,14 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.prefs.Preferences;
 
+/**
+ * ChatViewerController class handles the UI interactions for the chat viewer application.
+ * It allows users to open and display chat files.
+ */
 public class ChatViewerController {
     private static final String LAST_OPENED_FILE_KEY = "lastOpenedFile";
 
@@ -18,6 +23,11 @@ public class ChatViewerController {
     @FXML
     private TextFlow chatTextFlow;
 
+    /**
+     * Returns the TextFlow used to display chat messages.
+     *
+     * @return the TextFlow for chat messages.
+     */
     public TextFlow getChatTextFlow() {
         return chatTextFlow;
     }
@@ -25,19 +35,24 @@ public class ChatViewerController {
     private final Preferences preferences;
 
     ErrorHandler errorHandler = new ErrorHandler();
-
     private final ChatLoader chatLoader;
 
+    /**
+     * Constructs a ChatViewerController and initializes the necessary components.
+     */
     public ChatViewerController() {
         preferences = Preferences.userNodeForPackage(getClass());
         MessageProcessor messageProcessor = new MessageProcessor(this);
-        chatLoader = new ChatLoader(this, messageProcessor,errorHandler);
+        chatLoader = new ChatLoader(this, messageProcessor, errorHandler);
     }
 
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * Loads the last opened chat file if available.
+     */
     @FXML
     private void initialize() {
         try {
-            // Load the last opened file path from preferences
             String lastOpenedFilePath = preferences.get(LAST_OPENED_FILE_KEY, null);
             if (lastOpenedFilePath != null) {
                 filePathLabel.setText(lastOpenedFilePath);
@@ -48,14 +63,15 @@ public class ChatViewerController {
         }
     }
 
-
+    /**
+     * Opens a file chooser to select a chat file and loads the selected file.
+     */
     @FXML
     private void openFile() {
         Stage stage = (Stage) filePathLabel.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Message Files", "*"));
 
-        // Set initial directory to the last opened file directory
         String lastOpenedFilePath = preferences.get(LAST_OPENED_FILE_KEY, null);
         if (lastOpenedFilePath != null) {
             File lastOpenedFile = new File(lastOpenedFilePath);
@@ -67,17 +83,14 @@ public class ChatViewerController {
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
             try {
-                // Attempt to read the file
                 filePathLabel.setText(selectedFile.getAbsolutePath());
                 preferences.put(LAST_OPENED_FILE_KEY, selectedFile.getAbsolutePath());
                 chatLoader.loadChatAction(selectedFile);
             } catch (SecurityException e) {
-                // Handle file permission error
                 errorHandler.showErrorMessage("Error: Permission denied. Unable to access the selected file. \nMost likely you do not have access rights to this file.");
             } catch (IOException e) {
                 errorHandler.showErrorMessage("Error reading file: " + e.getMessage() + "\nTry selecting a different file.");
             } catch (Exception e) {
-                // Handle unexpected exceptions
                 errorHandler.showErrorMessage("An unexpected error occurred: " + e.getMessage() + "\nThe application cannot determine what the error is, try selecting a different file.");
             }
         }
